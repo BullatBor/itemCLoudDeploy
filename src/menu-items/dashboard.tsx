@@ -35,6 +35,14 @@ const dashboard: NavItemType = {
       url: '/dashboard/analytics',
       icon: icons.IconDeviceAnalytics,
       breadcrumbs: false
+    },
+    {
+      id: 'product',
+      title: <FormattedMessage id="Add product" />,
+      type: 'item',
+      url: '/product',
+      icon: icons.IconDeviceAnalytics,
+      breadcrumbs: false
     }
   ]
 };
