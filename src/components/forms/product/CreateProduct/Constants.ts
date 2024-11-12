@@ -1,48 +1,186 @@
-export const SIZE_COUNRY_DATA = [
+import { IMySelectOptions } from 'types/product';
+
+export const SIZE_COUNRY_DATA: IMySelectOptions[] = [
   {
-    value: 'eu',
-    label: 'EU'
+    value: 'EU'
   },
   {
-    value: 'us',
-    label: 'US'
+    value: 'US'
   },
   {
-    value: 'uk',
-    label: 'UK'
+    value: 'UK'
   },
   {
-    value: 'cm',
-    label: 'CM'
+    value: 'CM'
   }
 ];
 
-export const SIZE_DATA = [
+export const getSizeCounry = (brand: string) => {
+  switch (brand) {
+    case 'ADIDAS': {
+      const newSizeCountry = SIZE_COUNRY_DATA.filter((item) => item.value !== 'EU');
+      newSizeCountry.push({ value: 'FR' });
+      return newSizeCountry;
+    }
+    default:
+      return SIZE_COUNRY_DATA;
+  }
+};
+
+export const SIZE_COUNRY_DATA_ADIDAS = [
   {
-    value: '34',
-    label: '34'
+    value: 'FR'
   },
   {
-    value: '34.5',
-    label: '34.5'
+    value: 'US'
   },
   {
-    value: '35',
-    label: '35'
+    value: 'UK'
   },
   {
-    value: '36',
-    label: '36'
-  },
-  {
-    value: '36.5',
-    label: '36.5'
-  },
-  {
-    value: '37',
-    label: '37'
+    value: 'CM'
   }
 ];
+
+const EU_SIZE_DATA: IMySelectOptions[] = [
+  {
+    value: '38'
+  },
+  {
+    value: '39'
+  },
+  {
+    value: '40'
+  },
+  {
+    value: '41'
+  },
+  {
+    value: '42'
+  },
+  {
+    value: '43'
+  },
+  {
+    value: '44'
+  },
+  {
+    value: '45'
+  },
+  {
+    value: '46'
+  },
+  {
+    value: '47'
+  }
+];
+
+const US_SIZE_DATA: IMySelectOptions[] = [
+  {
+    value: '6'
+  },
+  {
+    value: '7'
+  },
+  {
+    value: '8'
+  },
+  {
+    value: '8.5'
+  },
+  {
+    value: '9'
+  },
+  {
+    value: '10'
+  },
+  {
+    value: '11'
+  },
+  {
+    value: '11.5'
+  },
+  {
+    value: '12'
+  },
+  {
+    value: '13'
+  },
+  {
+    value: '14'
+  },
+  {
+    value: '14.5'
+  },
+  {
+    value: '15'
+  }
+];
+
+const UK_SIZE_DATA: IMySelectOptions[] = [
+  {
+    value: '3'
+  }
+];
+
+const CM_SIZE_DATA: IMySelectOptions[] = [
+  {
+    value: '20.5'
+  },
+  {
+    value: '21'
+  },
+  {
+    value: '21.5'
+  },
+  {
+    value: '22'
+  },
+  {
+    value: '22.5'
+  },
+  {
+    value: '23.5'
+  },
+  {
+    value: '24'
+  },
+  {
+    value: '24.5'
+  },
+  {
+    value: '25'
+  },
+  {
+    value: '25.5'
+  },
+  {
+    value: '26'
+  },
+  {
+    value: '26.5'
+  },
+  {
+    value: '27'
+  },
+  {
+    value: '27.5'
+  },
+  {
+    value: '28'
+  },
+  {
+    value: '28.5'
+  }
+];
+
+export const SHOES_SIZES: { [key: string]: IMySelectOptions[] } = {
+  EU: EU_SIZE_DATA,
+  US: US_SIZE_DATA,
+  UK: UK_SIZE_DATA,
+  CM: CM_SIZE_DATA,
+  FR: EU_SIZE_DATA
+};
 
 export const SHOES_SPECIFICATION_RU: Record<string, string> = {
   weight: 'Вес',

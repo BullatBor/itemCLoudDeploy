@@ -1,5 +1,5 @@
 // material-ui
-import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, TextField, IconButton } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, TextField, IconButton, SelectChangeEvent } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -8,8 +8,9 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { MySelect } from 'ui-component/Select/Select';
-import { SIZE_DATA, SIZE_COUNRY_DATA } from './Constants';
+import * as SIZE from './Constants';
 import { IProductInfo } from './types';
+import { useEffect, useState } from 'react';
 
 const validationSchema = yup.object({
   // TODO: ожидаем ТЗ
@@ -23,12 +24,13 @@ interface AddressFormProps {
 }
 
 const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIndex }: AddressFormProps) => {
+  const [sizeCountry, setSizeCountry] = useState(SIZE.SIZE_COUNRY_DATA);
   const formik = useFormik({
     initialValues: {
       name: shippingData.name ?? '',
       brand: shippingData.brand ?? '',
-      size: 34,
-      sizeCountry: 'us',
+      size: 38,
+      sizeCountry: 'EU',
       description: '',
       additionalMaterials: []
     },
@@ -42,6 +44,11 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     }
   });
 
+  useEffect(() => {
+    const newSizeCountry = SIZE.getSizeCounry(formik.values.brand);
+    setSizeCountry(newSizeCountry);
+  }, [formik, formik.values.brand]);
+
   const addMaterials = () => {
     formik.setFieldValue('additionalMaterials', [...formik.values.additionalMaterials, '']);
   };
@@ -53,6 +60,10 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     );
   };
 
+  const sizeCountryHandler = (e: SelectChangeEvent) => {
+    formik.setFieldValue('size', SIZE.SHOES_SIZES[String(e.target.value)][0].value);
+    formik.handleChange(e);
+  };
   return (
     <>
       <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
@@ -99,7 +110,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
                   name={'size'}
                   value={String(formik.values.size)}
                   onChange={formik.handleChange}
-                  options={SIZE_DATA}
+                  options={SIZE.SHOES_SIZES[String(formik.values.sizeCountry)]}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -108,8 +119,8 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
                   label={'Страна'}
                   name={'sizeCountry'}
                   value={formik.values.sizeCountry}
-                  onChange={formik.handleChange}
-                  options={SIZE_COUNRY_DATA}
+                  onChange={sizeCountryHandler}
+                  options={sizeCountry}
                 />
               </Grid>
             </Grid>

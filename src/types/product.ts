@@ -23,3 +23,8 @@ export interface ProductStateProps {
   addresses: Address[];
   error: object | string | null;
 }
+
+export interface IMySelectOptions {
+  value: string;
+  label?: string;
+}
