@@ -7,7 +7,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // third-party
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { ISpecifications } from './types';
+import { ISpecifications } from 'types/product';
 
 const validationSchema = yup.object({
   /*TODO: Ждать ТЗ */

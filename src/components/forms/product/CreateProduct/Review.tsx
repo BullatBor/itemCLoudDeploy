@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 // material-ui
 import { List, ListItem, ListItemText, Typography, Stack } from '@mui/material';
-import { IProductInfo, ISpecifications } from './types';
+import { IProductInfo, ISpecifications } from 'types/product';
 import { SHOES_SPECIFICATION_RU, SHOES_INFO_RU } from './Constants';
 
 interface PROPS {
@@ -11,7 +11,12 @@ interface PROPS {
 }
 
 export const Review: FC<PROPS> = ({ productionInfo, specifications }) => {
-  const productionInfoArray = Object.entries(productionInfo).filter((product) => !Array.isArray(product[1]));
+  const productionInfoArray = Object.entries(productionInfo).filter((product) => {
+    if (Array.isArray(product[1]) || product[0] === 'id') {
+      return false;
+    }
+    return true;
+  });
   const specificationsArray = Object.entries(specifications);
   return (
     <>

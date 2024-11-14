@@ -17,6 +17,7 @@ export interface ProductCardProps extends KeyedObject {
 
 export interface ProductStateProps {
   products: Products[];
+  productsAll: IProductInfo[];
   product: Products | null;
   relatedProducts: Products[];
   reviews: Reviews[];
@@ -27,4 +28,43 @@ export interface ProductStateProps {
 export interface IMySelectOptions {
   value: string;
   label?: string;
+}
+
+export interface IProductInfo {
+  id: number;
+  name?: string;
+  category?: string;
+  brand?: string;
+  size?: IMySelectOptions[];
+  sizeCountry?: string;
+  description?: string;
+  additionalMaterials?: string[];
+  gender?: string;
+}
+
+export interface IProductForm extends IProductInfo {
+  relatedProducts?: IProductInfo[];
+  sameCollectionProducts?: IProductInfo[];
+  sameModelProducts?: IProductInfo[];
+}
+
+export interface ISpecifications {
+  weight?: string;
+  usage?: string;
+  top?: string;
+  sole?: string;
+  features?: string;
+  lacingMode?: string;
+  soleType?: string;
+  sockType?: string;
+  mainColor?: string;
+  height?: string;
+  season?: string;
+  article?: string;
+  officialPrice?: string;
+  releaseDate?: string;
+  set?: string;
+  materials?: string;
+  style?: string;
+  category?: string;
 }

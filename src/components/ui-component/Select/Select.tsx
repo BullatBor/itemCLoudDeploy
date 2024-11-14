@@ -4,21 +4,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { IMySelectOptions } from 'types/product';
+import { CardProps } from '@mui/material';
 
 interface Props {
   id: string;
   label: string;
   name: string;
-  value: string;
+  value?: string;
   options: IMySelectOptions[];
   onChange: (event: SelectChangeEvent) => void;
   menuHeight?: number;
+  sx?: CardProps['sx'];
 }
 
-export const MySelect: FC<Props> = ({ id, label, name, value, options, onChange, menuHeight = 150 }) => {
+export const MySelect: FC<Props> = ({ id, label, name, value, options, onChange, menuHeight = 150, sx }) => {
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 80 }}>
+      <FormControl sx={{ minWidth: 80, ...sx }}>
         <InputLabel id={`${label}-label`}>{label}</InputLabel>
         <Select
           id={id}

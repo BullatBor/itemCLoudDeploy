@@ -8,12 +8,46 @@ import { dispatch } from '../index';
 // types
 import { DefaultRootStateProps } from 'types';
 import { ProductsFilter, Address } from 'types/e-commerce';
+import { IProductInfo } from 'types/product';
 
 // ----------------------------------------------------------------------
+
+const MOCK_PRODUCTS: IProductInfo[] = [
+  {
+    id: 1,
+    name: 'Кроссовки Nike Air Max 90',
+    brand: 'Nike',
+    size: [{ value: '42' }],
+    sizeCountry: 'EU',
+    description:
+      'Классические кроссовки Nike Air Max 90 с воздушной подушкой для комфорта и амортизации. Идеально подходят для повседневной носки.',
+    additionalMaterials: ['Кожа', 'Синтетика', 'Резина']
+  },
+  {
+    id: 2,
+    name: 'Ботинки Timberland',
+    brand: 'Timberland',
+    size: [{ value: '43' }],
+    sizeCountry: 'US',
+    description:
+      'Прочные кожаные ботинки Timberland с водонепроницаемой мембраной. Идеально подходят для прогулок по пересеченной местности.',
+    additionalMaterials: ['Кожа', 'Текстиль', 'Резина']
+  },
+  {
+    id: 3,
+    name: 'Сандалии Birkenstock',
+    brand: 'Birkenstock',
+    size: [{ value: '40' }],
+    sizeCountry: 'EU',
+    description: 'Комфортные сандалии Birkenstock из натуральной кожи с анатомической стелькой. Идеально подходят для жаркой погоды.',
+    additionalMaterials: ['Кожа', 'Пробка', 'Резина']
+  }
+];
 
 const initialState: DefaultRootStateProps['product'] = {
   error: null,
   products: [],
+  productsAll: MOCK_PRODUCTS,
   product: null,
   relatedProducts: [],
   reviews: [],
@@ -24,6 +58,9 @@ const slice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    addProduct(state, action) {
+      state.productsAll = [...state.productsAll, action.payload];
+    },
     // HAS ERROR
     hasError(state, action) {
       state.error = action.payload;
@@ -70,6 +107,8 @@ const slice = createSlice({
     }
   }
 });
+
+export const { addProduct } = slice.actions;
 
 // Reducer
 export default slice.reducer;

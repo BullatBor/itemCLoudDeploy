@@ -11,8 +11,10 @@ import SpecificationsForm from './SpecificationsForm';
 import { Review } from './Review';
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { IProductInfo, ISpecifications } from './types';
+import { IProductInfo, ISpecifications } from 'types/product';
 import { STEPS_DATA } from './Constants';
+import { useDispatch } from 'store';
+import { addProduct } from 'store/slices/product';
 
 const getStepContent = (
   step: number,
@@ -50,11 +52,27 @@ const getStepContent = (
 
 const CreateShoesForm = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [productInfo, setProductInfo] = useState<IProductInfo>({});
+  const [productInfo, setProductInfo] = useState<IProductInfo>({
+    id: Date.now()
+  });
   const [specifications, setSpecifications] = useState<ISpecifications>({});
   const [errorIndex, setErrorIndex] = useState<number | null>(null);
+  const dispatch = useDispatch();
 
   const handleNext = () => {
+    if (activeStep === STEPS_DATA.length - 1) {
+      dispatch(
+        addProduct({
+          id: productInfo.id,
+          name: productInfo.name,
+          description: productInfo.description,
+          brand: productInfo.brand,
+          size: productInfo.size,
+          sizeCountry: productInfo.sizeCountry,
+          additionalMaterials: productInfo.additionalMaterials
+        })
+      );
+    }
     setActiveStep(activeStep + 1);
     setErrorIndex(null);
   };
@@ -62,7 +80,6 @@ const CreateShoesForm = () => {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
   return (
     <MainCard title="Добавление товара">
       <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -102,7 +119,7 @@ const CreateShoesForm = () => {
                   variant="contained"
                   color="error"
                   onClick={() => {
-                    setProductInfo({});
+                    setProductInfo({ id: Date.now() });
                     setSpecifications({});
                     setActiveStep(0);
                   }}

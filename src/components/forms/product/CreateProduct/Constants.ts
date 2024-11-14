@@ -42,7 +42,7 @@ export const SIZE_COUNRY_DATA_ADIDAS = [
   }
 ];
 
-const EU_SIZE_DATA: IMySelectOptions[] = [
+const EU_SIZE_DATA_FEMALE: IMySelectOptions[] = [
   {
     value: '38'
   },
@@ -63,6 +63,48 @@ const EU_SIZE_DATA: IMySelectOptions[] = [
   },
   {
     value: '44'
+  },
+  {
+    value: '45'
+  },
+  {
+    value: '46'
+  },
+  {
+    value: '47'
+  }
+];
+
+const EU_SIZE_DATA_MALE: IMySelectOptions[] = [
+  {
+    value: '40'
+  },
+  {
+    value: '40.5'
+  },
+  {
+    value: '41'
+  },
+  {
+    value: '41.5'
+  },
+  {
+    value: '42'
+  },
+  {
+    value: '42.5'
+  },
+  {
+    value: '43'
+  },
+  {
+    value: '43.5'
+  },
+  {
+    value: '44'
+  },
+  {
+    value: '44.5'
   },
   {
     value: '45'
@@ -175,11 +217,16 @@ const CM_SIZE_DATA: IMySelectOptions[] = [
 ];
 
 export const SHOES_SIZES: { [key: string]: IMySelectOptions[] } = {
-  EU: EU_SIZE_DATA,
-  US: US_SIZE_DATA,
-  UK: UK_SIZE_DATA,
-  CM: CM_SIZE_DATA,
-  FR: EU_SIZE_DATA
+  'EU-male': EU_SIZE_DATA_MALE,
+  'US-male': US_SIZE_DATA,
+  'UK-male': UK_SIZE_DATA,
+  'CM-male': CM_SIZE_DATA,
+  'FR-male': EU_SIZE_DATA_MALE,
+  'EU-female': EU_SIZE_DATA_FEMALE,
+  'US-female': US_SIZE_DATA,
+  'UK-female': UK_SIZE_DATA,
+  'CM-female': CM_SIZE_DATA,
+  'FR-female': EU_SIZE_DATA_FEMALE
 };
 
 export const SHOES_SPECIFICATION_RU: Record<string, string> = {
@@ -208,7 +255,46 @@ export const SHOES_INFO_RU: Record<string, string> = {
   brand: 'Брэнд',
   size: 'Размер',
   sizeCountry: 'Стандарт размеров',
-  description: 'Описание'
+  description: 'Описание',
+  gender: 'Пол',
+  category: 'Категория'
 };
 
 export const STEPS_DATA = ['Информация о товаре', 'Характеристики', 'Итоговые данные'];
+
+export const GENDER_DATA: IMySelectOptions[] = [
+  {
+    value: 'male',
+    label: 'мужской'
+  },
+  { value: 'female', label: 'женский' }
+];
+
+export const BRAND_DATA: { label: string }[] = [
+  { label: 'ADIDAS' },
+  { label: 'Asics' },
+  { label: 'Nike' },
+  { label: 'Timberland' },
+  { label: 'Birkenstock' }
+];
+
+export const CATEGORY_DATA: { label: string }[] = [
+  {
+    label: 'Кроссовки'
+  },
+  {
+    label: 'Ботинки'
+  },
+  {
+    label: 'Сандалии'
+  },
+  {
+    label: 'Туфли'
+  },
+  {
+    label: 'Кеды'
+  },
+  {
+    label: 'Тапочки'
+  }
+];
