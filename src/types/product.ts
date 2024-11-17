@@ -27,7 +27,7 @@ export interface ProductStateProps {
 
 export interface IMySelectOptions {
   value: string;
-  label?: string;
+  label: string;
 }
 
 export interface IProductInfo {
@@ -46,6 +46,14 @@ export interface IProductForm extends IProductInfo {
   relatedProducts?: IProductInfo[];
   sameCollectionProducts?: IProductInfo[];
   sameModelProducts?: IProductInfo[];
+  imgFiles: IFile[];
+  videoFiles: IFile[];
+}
+
+export interface IFile {
+  name: string;
+  url: string;
+  type: string;
 }
 
 export interface ISpecifications {
@@ -68,3 +76,5 @@ export interface ISpecifications {
   style?: string;
   category?: string;
 }
+
+export type FileType = 'image' | 'video' | 'videoWrapper';

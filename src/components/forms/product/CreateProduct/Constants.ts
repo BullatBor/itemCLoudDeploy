@@ -263,11 +263,10 @@ export const SHOES_INFO_RU: Record<string, string> = {
 export const STEPS_DATA = ['Информация о товаре', 'Характеристики', 'Итоговые данные'];
 
 export const GENDER_DATA: IMySelectOptions[] = [
-  {
-    value: 'male',
-    label: 'мужской'
-  },
-  { value: 'female', label: 'женский' }
+  { value: 'female', label: 'женский' },
+  { value: 'girls', label: 'девочки' },
+  { value: 'boys', label: 'мальчики' },
+  { value: 'male', label: 'мужской' }
 ];
 
 export const BRAND_DATA: { label: string }[] = [

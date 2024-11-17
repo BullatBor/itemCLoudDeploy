@@ -12,6 +12,12 @@ import {
   SelectChangeEvent
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
@@ -20,10 +26,13 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { MySelect } from 'ui-component/Select/Select';
 import * as SIZE from './Constants';
-import { IProductInfo, IProductForm, IMySelectOptions } from 'types/product';
-import { SyntheticEvent, useState } from 'react';
+import { IProductInfo, IProductForm, IMySelectOptions, FileType } from 'types/product';
+import { SyntheticEvent, useCallback, useState } from 'react';
 import { useSelector } from 'store';
 import SearchSelect from 'ui-component/searchSelect';
+import FileForm from './FileForm';
+import ShoeSizeChart from '../../../ui-component/sizeTable';
+import MultiLevelList from 'ui-component/multiLevelList';
 
 const validationSchema = yup.object({
   // TODO: ожидаем ТЗ
@@ -53,7 +62,9 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
       additionalMaterials: shippingData.additionalMaterials ?? [],
       relatedProducts: shippingData.relatedProducts ?? [],
       sameCollectionProducts: shippingData.sameCollectionProducts ?? [],
-      sameModelProducts: shippingData.sameModelProducts ?? []
+      sameModelProducts: shippingData.sameModelProducts ?? [],
+      imgFiles: shippingData.imgFiles ?? [],
+      videoFiles: shippingData.videoFiles ?? []
     },
     validationSchema,
     onSubmit: (values) => {
@@ -125,7 +136,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     formik.setFieldValue('category', value?.label);
   };
 
-  const genderHandler = (e: SelectChangeEvent) => {
+  const genderHandler = (e: SyntheticEvent, value: IMySelectOptions[]) => {
     formik.setFieldValue('size', []);
     formik.handleChange(e);
   };
@@ -133,6 +144,40 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
   const sizeHandler = (e: SyntheticEvent, value: IMySelectOptions[]) => {
     formik.setFieldValue('size', value);
   };
+
+  const handleFiles = useCallback(
+    (files: File[], type: FileType) => {
+      switch (type) {
+        case 'image':
+          formik.setFieldValue('imgFiles', [...formik.values.imgFiles, ...files]);
+          break;
+        case 'video':
+          formik.setFieldValue('videoFiles', [...formik.values.videoFiles, ...files]);
+          break;
+        case 'video':
+          formik.setFieldValue('videoFiles', [...formik.values.videoFiles, ...files]);
+          break;
+      }
+    },
+    [formik.values.imgFiles, formik.values.videoFiles]
+  );
+
+  const handleDeleteFiles = useCallback(
+    (type: FileType, index: number) => {
+      let newFiles = [];
+      switch (type) {
+        case 'image':
+          newFiles = formik.values.imgFiles.filter((_file, i) => i !== index);
+          formik.setFieldValue('imgFiles', newFiles);
+          break;
+        case 'video':
+          newFiles = formik.values.videoFiles.filter((_file, i) => i !== index);
+          formik.setFieldValue('videoFiles', newFiles);
+          break;
+      }
+    },
+    [formik.values.imgFiles, formik.values.videoFiles]
+  );
 
   return (
     <>
@@ -176,13 +221,23 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
           <Grid item xs={12}>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={3}>
-                <MySelect
-                  id="gender"
-                  label={'Пол'}
-                  name={'gender'}
-                  value={formik.values.gender}
-                  onChange={genderHandler}
+                <Autocomplete
+                  multiple
+                  id="checkboxes-tags-demo"
                   options={SIZE.GENDER_DATA}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.label || option.value}
+                  onChange={genderHandler}
+                  renderOption={(props, option, { selected }) => {
+                    const { key, ...optionProps } = props;
+                    return (
+                      <li key={key} {...optionProps}>
+                        <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                        {option.label || option.value}
+                      </li>
+                    );
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Пол" placeholder="Пол" />}
                 />
               </Grid>
               <Grid item xs={12} sm={9}>
@@ -225,6 +280,14 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
               autoComplete="shipping address-line2"
             />
           </Grid>
+          <FileForm
+            imgTypeFiles={formik.values.imgFiles}
+            videoTypeFiles={formik.values.videoFiles}
+            setFiles={handleFiles}
+            deleteFiles={handleDeleteFiles}
+          />
+          <ShoeSizeChart />
+          <MultiLevelList />
           <Grid item xs={12}>
             <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
               Дополнительные материалы

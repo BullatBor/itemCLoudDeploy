@@ -8,7 +8,7 @@ import { gridSpacing } from 'store/constant';
 const CreateProduct = () => {
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'}>
-      <Grid item xs={7}>
+      <Grid item xs={12}>
         <ProductCreateForm />
       </Grid>
     </Grid>

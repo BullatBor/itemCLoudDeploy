@@ -11,7 +11,7 @@ import SpecificationsForm from './SpecificationsForm';
 import { Review } from './Review';
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { IProductInfo, ISpecifications } from 'types/product';
+import { IProductForm, ISpecifications } from 'types/product';
 import { STEPS_DATA } from './Constants';
 import { useDispatch } from 'store';
 import { addProduct } from 'store/slices/product';
@@ -21,8 +21,8 @@ const getStepContent = (
   handleNext: () => void,
   handleBack: () => void,
   setErrorIndex: (i: number | null) => void,
-  productInfo: IProductInfo,
-  setProductInfo: (d: IProductInfo) => void,
+  productInfo: IProductForm,
+  setProductInfo: (d: IProductForm) => void,
   specifications: ISpecifications,
   setSpecifications: (d: ISpecifications) => void
 ) => {
@@ -52,8 +52,10 @@ const getStepContent = (
 
 const CreateShoesForm = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [productInfo, setProductInfo] = useState<IProductInfo>({
-    id: Date.now()
+  const [productInfo, setProductInfo] = useState<IProductForm>({
+    id: Date.now(),
+    imgFiles: [],
+    videoFiles: []
   });
   const [specifications, setSpecifications] = useState<ISpecifications>({});
   const [errorIndex, setErrorIndex] = useState<number | null>(null);
@@ -81,7 +83,7 @@ const CreateShoesForm = () => {
     setActiveStep(activeStep - 1);
   };
   return (
-    <MainCard title="Добавление товара">
+    <MainCard title="Добавление товара" sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
         {STEPS_DATA.map((label, index) => {
           const labelProps: { error?: boolean; optional?: ReactNode } = {};
@@ -119,7 +121,7 @@ const CreateShoesForm = () => {
                   variant="contained"
                   color="error"
                   onClick={() => {
-                    setProductInfo({ id: Date.now() });
+                    setProductInfo({ id: Date.now(), imgFiles: [], videoFiles: [] });
                     setSpecifications({});
                     setActiveStep(0);
                   }}
