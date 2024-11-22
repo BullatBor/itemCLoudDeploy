@@ -24,16 +24,26 @@ const getStepContent = (
   productInfo: IProductForm,
   setProductInfo: (d: IProductForm) => void,
   specifications: ISpecifications,
-  setSpecifications: (d: ISpecifications) => void
+  setSpecifications: (d: ISpecifications) => void,
+  productType: string,
+  setProductType: (type: string) => void
 ) => {
   switch (step) {
     case 0:
       return (
-        <ProducInfoForm handleNext={handleNext} setErrorIndex={setErrorIndex} shippingData={productInfo} setShippingData={setProductInfo} />
+        <ProducInfoForm
+          productType={productType}
+          setProductType={setProductType}
+          handleNext={handleNext}
+          setErrorIndex={setErrorIndex}
+          shippingData={productInfo}
+          setShippingData={setProductInfo}
+        />
       );
     case 1:
       return (
         <SpecificationsForm
+          productType={productType}
           handleNext={handleNext}
           handleBack={handleBack}
           setErrorIndex={setErrorIndex}
@@ -59,6 +69,7 @@ const CreateShoesForm = () => {
   });
   const [specifications, setSpecifications] = useState<ISpecifications>({});
   const [errorIndex, setErrorIndex] = useState<number | null>(null);
+  const [productType, setProductType] = useState<string>(''); // Тип товара: Обувь, одежда
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -142,7 +153,9 @@ const CreateShoesForm = () => {
               productInfo,
               setProductInfo,
               specifications,
-              setSpecifications
+              setSpecifications,
+              productType,
+              setProductType
             )}
             {activeStep === STEPS_DATA.length - 1 && (
               <Stack direction="row" justifyContent={activeStep !== 0 ? 'space-between' : 'flex-end'}>

@@ -1,22 +1,6 @@
 // material-ui
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Stack,
-  Typography,
-  Autocomplete,
-  TextField,
-  IconButton,
-  SelectChangeEvent
-} from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, Autocomplete, TextField, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -24,15 +8,15 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // third-party
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { MySelect } from 'ui-component/Select/Select';
+
 import * as SIZE from './Constants';
-import { IProductInfo, IProductForm, IMySelectOptions, FileType } from 'types/product';
+import { IProductInfo, IProductForm, FileType } from 'types/product';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { useSelector } from 'store';
 import SearchSelect from 'ui-component/searchSelect';
 import FileForm from './FileForm';
-import ShoeSizeChart from '../../../ui-component/sizeTable';
 import MultiLevelList from 'ui-component/multiLevelList';
+import { ShoesFields } from './fields/Shoes/shoesFields';
 
 const validationSchema = yup.object({
   // TODO: ожидаем ТЗ
@@ -43,9 +27,11 @@ interface AddressFormProps {
   setShippingData: (d: IProductForm) => void;
   handleNext: () => void;
   setErrorIndex: (i: number | null) => void;
+  productType: string;
+  setProductType: (type: string) => void;
 }
 
-const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIndex }: AddressFormProps) => {
+const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIndex, productType, setProductType }: AddressFormProps) => {
   const [sizeCountryOptions, setSizeCountryOptions] = useState(SIZE.SIZE_COUNRY_DATA);
 
   const products = useSelector((state) => state.product.productsAll);
@@ -86,11 +72,6 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     );
   };
 
-  const sizeCountryHandler = (e: SelectChangeEvent) => {
-    formik.setFieldValue('size', []);
-    formik.handleChange(e);
-  };
-
   const setRelatedProducts = (newProduct: IProductInfo, type: 'add' | 'remove') => {
     if (type === 'add') {
       formik.setFieldValue('relatedProducts', [...formik.values.relatedProducts, newProduct]);
@@ -121,28 +102,17 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
   const brandHandler = (e: SyntheticEvent, value: { label: string } | null) => {
     if (value?.label === 'ADIDAS') {
       const newSizeCountry = SIZE.getSizeCounry(value?.label);
-      setSizeCountryOptions(newSizeCountry);
+      if (productType === 'Обувь') {
+        setSizeCountryOptions(newSizeCountry);
+      }
 
       formik.setFieldValue('sizeCountry', 'FR');
     }
-    if (formik.values.sizeCountry === 'FR') {
+    if (formik.values.sizeCountry === 'FR' && productType === 'Обувь') {
       setSizeCountryOptions(SIZE.SIZE_COUNRY_DATA);
       formik.setFieldValue('sizeCountry', 'EU');
     }
     formik.setFieldValue('brand', value?.label || '');
-  };
-
-  const categoryHandler = (e: SyntheticEvent, value: { label: string } | null) => {
-    formik.setFieldValue('category', value?.label);
-  };
-
-  const genderHandler = (e: SyntheticEvent, value: IMySelectOptions[]) => {
-    formik.setFieldValue('size', []);
-    formik.handleChange(e);
-  };
-
-  const sizeHandler = (e: SyntheticEvent, value: IMySelectOptions[]) => {
-    formik.setFieldValue('size', value);
   };
 
   const handleFiles = useCallback(
@@ -183,6 +153,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     <>
       <form onSubmit={formik.handleSubmit} id="validation-forms">
         <Grid container spacing={3}>
+          <MultiLevelList onChange={setProductType} />
           <Grid item xs={12}>
             <TextField
               id="name"
@@ -207,7 +178,8 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
               renderInput={(params) => <TextField label={'Бренд'} value={formik.values.brand} {...params} />}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* 
+            <Grid item xs={12}>
             <Autocomplete
               id="category"
               disablePortal
@@ -217,57 +189,8 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
               sx={{ width: '100%' }}
               renderInput={(params) => <TextField {...params} label="Категория" />}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={3}>
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={SIZE.GENDER_DATA}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option.label || option.value}
-                  onChange={genderHandler}
-                  renderOption={(props, option, { selected }) => {
-                    const { key, ...optionProps } = props;
-                    return (
-                      <li key={key} {...optionProps}>
-                        <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-                        {option.label || option.value}
-                      </li>
-                    );
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Пол" placeholder="Пол" />}
-                />
-              </Grid>
-              <Grid item xs={12} sm={9}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={9}>
-                    <Autocomplete
-                      multiple
-                      sx={{ width: '100%' }}
-                      id="size"
-                      value={formik.values.size}
-                      onChange={sizeHandler}
-                      options={SIZE.SHOES_SIZES[`${formik.values.sizeCountry}-${formik.values.gender}`]}
-                      getOptionLabel={(option) => option.value}
-                      renderInput={(params) => <TextField {...params} label="Размер" placeholder="Размер" />}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <MySelect
-                      id="sizeCountry"
-                      label={'Страна'}
-                      name={'sizeCountry'}
-                      value={formik.values.sizeCountry}
-                      onChange={sizeCountryHandler}
-                      options={sizeCountryOptions}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+          </Grid>*/}
+
           <Grid item xs={12}>
             <TextField
               id="description"
@@ -280,14 +203,13 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
               autoComplete="shipping address-line2"
             />
           </Grid>
+          {productType === 'Обувь' && <ShoesFields formik={formik} sizeOptions={sizeCountryOptions} />}
           <FileForm
             imgTypeFiles={formik.values.imgFiles}
             videoTypeFiles={formik.values.videoFiles}
             setFiles={handleFiles}
             deleteFiles={handleDeleteFiles}
           />
-          <ShoeSizeChart />
-          <MultiLevelList />
           <Grid item xs={12}>
             <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
               Дополнительные материалы

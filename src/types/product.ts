@@ -27,7 +27,7 @@ export interface ProductStateProps {
 
 export interface IMySelectOptions {
   value: string;
-  label: string;
+  label?: string;
 }
 
 export interface IProductInfo {

@@ -297,3 +297,28 @@ export const CATEGORY_DATA: { label: string }[] = [
     label: 'Тапочки'
   }
 ];
+
+export const MATERIAL_DATA: IMySelectOptions[] = [
+  { value: 'skin', label: 'Натуральная кожа' },
+  { value: 'nubuck', label: 'Нубук' },
+  { value: 'suede', label: 'Замша' },
+  { value: 'patentLeather', label: 'Лакированная кожа' },
+  { value: 'syntheticLeather', label: 'Искусственная кожа' },
+  { value: 'textile', label: 'Текстиль' },
+  { value: 'rubber', label: 'Резина' },
+  { value: 'pvc', label: 'ПВХ' },
+  { value: 'eva', label: 'ЭВА' },
+  { value: 'pu', label: 'ПУ (полиуретан)' },
+  { value: 'mesh', label: 'Сетка' },
+  { value: 'canvas', label: 'Брезент' }
+];
+
+export const OUTSOLE_MATERIAL_DATA: IMySelectOptions[] = [
+  { value: 'rubber', label: 'Резина' },
+  { value: 'pu', label: 'ПУ (полиуретан)' },
+  { value: 'tpu', label: 'ТПУ (термопластичный полиуретан)' },
+  { value: 'eva', label: 'ЭВА' },
+  { value: 'pvc', label: 'ПВХ' },
+  { value: 'leather', label: 'Кожа' }, // Кожаная подошва встречается реже, но все же возможна
+  { value: 'composite', label: 'Композитный материал' }
+];
