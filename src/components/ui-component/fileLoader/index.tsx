@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { FC } from 'react';
 import Dropzone from 'react-dropzone';
 import { FILE_TYPE } from './Constants';
-import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
 
 interface IFileLoader {
   type: 'image' | 'video';
@@ -15,18 +15,22 @@ const FileLoader: FC<IFileLoader> = ({ type, setValue }) => {
       {({ getRootProps, getInputProps }) => (
         <Box
           sx={{
-            width: '100%',
-            border: '1px dashed grey',
+            width: 'fit-content',
             borderRadius: '10px',
+            backgroundColor: '#D3D3D3',
+            transition: '0.3s',
             '&:hover': {
-              border: '1px dashed blue',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              backgroundColor: '#C0C0C0'
             }
           }}
         >
-          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} {...getRootProps()}>
+          <div
+            style={{ width: '70px', height: '90px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            {...getRootProps()}
+          >
             <input {...getInputProps()} />
-            <Typography sx={{ py: '40px' }}>Выберите или перетащите файлы в эту область</Typography>
+            <AddIcon color="secondary" />
           </div>
         </Box>
       )}

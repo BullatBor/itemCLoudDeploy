@@ -24,10 +24,10 @@ const PhotoFormLoader: FC<IPhotoFormLoader> = ({ imgTypeFiles, setFiles, deleteF
       <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
         Выбирайте качественные снимки, покажите товар со всех ракурсов - это поможет выделить товар среди других.
       </Typography>
-      <Grid item>
+      <Grid item xs={12} sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: '4px' }}>
+        <FilePreview deleteFile={previewHandler} files={imgTypeFiles} type="image" />
         <FileLoader type="image" setValue={fileHandler} />
       </Grid>
-      <FilePreview deleteFile={previewHandler} title="Фото товара" files={imgTypeFiles} type="image" />
     </>
   );
 };

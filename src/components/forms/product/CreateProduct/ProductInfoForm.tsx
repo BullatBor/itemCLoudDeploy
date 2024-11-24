@@ -119,6 +119,9 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
     (files: File[], type: FileType) => {
       switch (type) {
         case 'image':
+          if (files.length > 3) {
+          }
+
           formik.setFieldValue('imgFiles', [...formik.values.imgFiles, ...files]);
           break;
         case 'video':
