@@ -6,12 +6,13 @@ import AddIcon from '@mui/icons-material/Add';
 
 interface IFileLoader {
   type: 'image' | 'video';
-  setValue: (value: File[]) => void;
+  materialsIndex?: number; //индекс доп материала
+  setValue: (value: File[], materialsIndex?: number) => void;
 }
 
-const FileLoader: FC<IFileLoader> = ({ type, setValue }) => {
+const FileLoader: FC<IFileLoader> = ({ type, setValue, materialsIndex }) => {
   return (
-    <Dropzone accept={FILE_TYPE[type]} onDrop={(acceptedFiles) => setValue(acceptedFiles)}>
+    <Dropzone accept={FILE_TYPE[type]} onDrop={(acceptedFiles) => setValue(acceptedFiles, materialsIndex)}>
       {({ getRootProps, getInputProps }) => (
         <Box
           sx={{

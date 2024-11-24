@@ -5,6 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { IProductInfo } from 'types/product';
 import { Box, Typography, Grid } from '@mui/material';
 import ProductCard from 'components/forms/product/productCard';
+import { OptionCard } from './OptionCard';
 
 interface ISearchSelect {
   label: string;
@@ -41,10 +42,10 @@ const SearchSelect: FC<ISearchSelect> = ({ label, inputLabel, options, setRelate
           freeSolo
           options={newOptions}
           renderOption={(props, option, state) => (
-            <Box onClick={() => clickHandler(option)} sx={{ cursor: 'pointer' }}>
-              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-                {option.name}
-              </Typography>
+            <Box onClick={() => clickHandler(option)} sx={{ cursor: 'pointer', p: '10px', borderRadius: '10px', transition: '0.3s', ":hover": {
+              backgroundColor: '#D3D3D3'
+            } }}>
+              <OptionCard {...option}/>
             </Box>
           )}
           renderInput={(params) => <TextField {...params} label={inputLabel} />}

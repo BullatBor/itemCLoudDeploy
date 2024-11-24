@@ -1,6 +1,4 @@
 import { Grid, Typography, Button, Stack } from '@mui/material';
-import Image from 'next/image';
-import Asics from './asics.jpg';
 import { IProductInfo } from 'types/product';
 import { FC } from 'react';
 
@@ -8,7 +6,7 @@ interface IProductCardInfo extends IProductInfo {
   onClick: () => void;
 }
 
-const ProductCard: FC<IProductCardInfo> = ({ name, brand, description, onClick }) => {
+const ProductCard: FC<IProductCardInfo> = ({ name, brand, description, image, onClick }) => {
   return (
     <Grid
       item
@@ -29,8 +27,8 @@ const ProductCard: FC<IProductCardInfo> = ({ name, brand, description, onClick }
           {name}
         </Typography>
       </Grid>
-      <Grid item>
-        <Image width={110} height={60} src={Asics.src} alt={name || 'shoes'} />
+      <Grid item sx={{display: 'flex', justifyContent: 'center'}}>
+        <img width={150} height={70} src={image || ''} alt={name || 'shoes'} />
       </Grid>
       <Grid item>
         <Typography variant="h6" sx={{ color: 'grey' }}>

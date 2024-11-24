@@ -1,7 +1,5 @@
 // material-ui
-import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, Autocomplete, TextField, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Autocomplete, TextField } from '@mui/material';
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
@@ -17,6 +15,7 @@ import SearchSelect from 'ui-component/searchSelect';
 import FileForm from './FileForm';
 import MultiLevelList from 'ui-component/multiLevelList';
 import { ShoesFields } from './fields/Shoes/shoesFields';
+import { AdditionalMaterials } from './AdditionalMaterials';
 
 const validationSchema = yup.object({
   // TODO: ожидаем ТЗ
@@ -60,17 +59,6 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
       handleNext();
     }
   });
-
-  const addMaterials = () => {
-    formik.setFieldValue('additionalMaterials', [...formik.values.additionalMaterials, '']);
-  };
-
-  const removeMaterials = (index: number) => {
-    formik.setFieldValue(
-      'additionalMaterials',
-      formik.values.additionalMaterials.filter((_, i) => i !== index)
-    );
-  };
 
   const setRelatedProducts = (newProduct: IProductInfo, type: 'add' | 'remove') => {
     if (type === 'add') {
@@ -213,46 +201,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
             setFiles={handleFiles}
             deleteFiles={handleDeleteFiles}
           />
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
-              Дополнительные материалы
-            </Typography>
-
-            {formik.values.additionalMaterials.length ? (
-              <Grid container spacing={2}>
-                {formik.values.additionalMaterials.map((_, index) => {
-                  return (
-                    <Grid key={index} item xs={12}>
-                      <Stack direction="row" alignItems="center" justifyContent="flex-end">
-                        <TextField
-                          id="description"
-                          label="Доп материал"
-                          fullWidth
-                          autoComplete="shipping address-line2"
-                          {...formik.getFieldProps(`additionalMaterials[${index}]`)}
-                        />
-                        <IconButton aria-label="delete" onClick={() => removeMaterials(index)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </Stack>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            ) : (
-              <Stack alignItems="center" justifyContent="center">
-                <Typography variant="body2">{'Ничего нет'}</Typography>
-              </Stack>
-            )}
-
-            <Stack direction="row" justifyContent="flex-end">
-              <AnimateButton>
-                <Button variant="contained" sx={{ my: 3, ml: 1 }} type="button" onClick={addMaterials}>
-                  Добавить
-                </Button>
-              </AnimateButton>
-            </Stack>
-          </Grid>
+          <AdditionalMaterials formik={formik} />
           <SearchSelect label={'Сопутствующие товары'} inputLabel={'Поиск'} options={products} setRelatedId={setRelatedProducts} />
           <SearchSelect label={'Товары из одной коллекции'} inputLabel={'Поиск'} options={products} setRelatedId={setCollectionProducts} />
           <SearchSelect label={'Товары такой же модели'} inputLabel={'Поиск'} options={products} setRelatedId={setModelProducts} />

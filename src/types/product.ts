@@ -40,6 +40,7 @@ export interface IProductInfo {
   description?: string;
   additionalMaterials?: string[];
   gender?: string;
+  image?: string;
 }
 
 export interface IProductForm extends IProductInfo {

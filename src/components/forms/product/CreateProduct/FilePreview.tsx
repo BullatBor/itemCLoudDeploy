@@ -11,16 +11,15 @@ import { IFile } from 'types/product';
 interface IFilePreview {
   type: 'image' | 'video';
   files: IFile[] | File[];
+  deleteFile: (index: number, materialsIndex?: number) => void;
   title?: string;
   height?: number;
-  deleteFile: (index: number) => void;
+  materialsIndex?: number; //Индекс чтобы удалять картинки в Доп материалы
+  stubsCount?: number;
 }
-
-const MAX_STUBS_COUNT = 3;
-
-export const FilePreview: FC<IFilePreview> = ({ type, files, title, height, deleteFile }) => {
-  const stubsCount = MAX_STUBS_COUNT > files.length ? MAX_STUBS_COUNT - files.length : 0;
-  const stubsArray = Array.from({ length: stubsCount }, () => null);
+export const FilePreview: FC<IFilePreview> = ({ type, files, title, height, materialsIndex, deleteFile, stubsCount = 0 }) => {
+  const count = stubsCount > files.length ? stubsCount - files.length : 0;
+  const stubsArray = Array.from({ length: count }, () => null);
   return (
     <>
       {title && (
@@ -55,7 +54,7 @@ export const FilePreview: FC<IFilePreview> = ({ type, files, title, height, dele
                 )}
 
                 <Box
-                  onClick={() => deleteFile(index)}
+                  onClick={() => deleteFile(index, materialsIndex)}
                   sx={{
                     position: 'absolute',
                     right: '2px',
