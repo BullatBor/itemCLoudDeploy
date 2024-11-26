@@ -15,6 +15,26 @@ import { IProductForm, ISpecifications } from 'types/product';
 import { STEPS_DATA } from './Constants';
 import { useDispatch } from 'store';
 import { addProduct } from 'store/slices/product';
+import { BIRKENSTON, NIKE_SHOES, TIMBERLAND } from 'store/constant';
+
+const MOCK = {
+  id: Date.now(),
+  name: '',
+  brand: '',
+  size: [{ value: '42' }],
+  sizeCountry: 'EU',
+  category: { value: '', path: [] },
+  gender: { value: 'male', label: 'мужской' },
+  description:
+    '',
+  additionalMaterials: [],
+  image: '',
+  combinedProducts: [NIKE_SHOES, TIMBERLAND, BIRKENSTON],
+  relatedProducts: [],
+  sameCollectionProducts: [],
+  sameModelProducts: [],
+  imgFiles: []
+}
 
 const getStepContent = (
   step: number,
@@ -62,11 +82,7 @@ const getStepContent = (
 
 const CreateShoesForm = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [productInfo, setProductInfo] = useState<IProductForm>({
-    id: Date.now(),
-    imgFiles: [],
-    videoFiles: []
-  });
+  const [productInfo, setProductInfo] = useState<IProductForm>(MOCK);
   const [specifications, setSpecifications] = useState<ISpecifications>({});
   const [errorIndex, setErrorIndex] = useState<number | null>(null);
   const [productType, setProductType] = useState<string>(''); // Тип товара: Обувь, одежда
@@ -94,7 +110,7 @@ const CreateShoesForm = () => {
     setActiveStep(activeStep - 1);
   };
   return (
-    <MainCard title="Добавление товара" sx={{ width: '100%' }}>
+    <MainCard title="Добавление товара" sx={{ width: '100%' }} contentSX={{ padding: { xs: '8px', sm: '14px' } }}>
       <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
         {STEPS_DATA.map((label, index) => {
           const labelProps: { error?: boolean; optional?: ReactNode } = {};
@@ -111,7 +127,7 @@ const CreateShoesForm = () => {
 
           return (
             <Step key={label}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+              <StepLabel {...labelProps} ><Typography sx={{ fontSize: { xs: '12px', sm: '14px' } }} >{label}</Typography></StepLabel>
             </Step>
           );
         })}
@@ -132,7 +148,7 @@ const CreateShoesForm = () => {
                   variant="contained"
                   color="error"
                   onClick={() => {
-                    setProductInfo({ id: Date.now(), imgFiles: [], videoFiles: [] });
+                    setProductInfo(MOCK);
                     setSpecifications({});
                     setActiveStep(0);
                   }}

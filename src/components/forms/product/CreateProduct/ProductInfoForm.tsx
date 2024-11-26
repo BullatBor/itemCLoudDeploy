@@ -1,5 +1,5 @@
 // material-ui
-import { Button, Checkbox, FormControlLabel, Grid, Stack, Autocomplete, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Autocomplete, TextField, Modal, Box } from '@mui/material';
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
@@ -9,13 +9,18 @@ import * as yup from 'yup';
 
 import * as SIZE from './Constants';
 import { IProductInfo, IProductForm, FileType } from 'types/product';
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'store';
 import SearchSelect from 'ui-component/searchSelect';
 import FileForm from './FileForm';
 import MultiLevelList from 'ui-component/multiLevelList';
 import { ShoesFields } from './fields/Shoes/shoesFields';
 import { AdditionalMaterials } from './AdditionalMaterials';
+import CombinedProducts from './CombinedProducts';
+import { OptionCard } from 'ui-component/searchSelect/OptionCard';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { BIRKENSTON, NIKE_SHOES, TIMBERLAND } from 'store/constant';
 
 const validationSchema = yup.object({
   // TODO: ожидаем ТЗ
@@ -30,11 +35,51 @@ interface AddressFormProps {
   setProductType: (type: string) => void;
 }
 
+const MOCK = {
+  id: Date.now(),
+  name: '',
+  brand: '',
+  size: [{ value: '42' }],
+  sizeCountry: 'EU',
+  category: { value: '', path: [] },
+  gender: { value: 'male', label: 'мужской' },
+  description:
+    '',
+  additionalMaterials: [],
+  image: '',
+  combinedProducts: [BIRKENSTON, NIKE_SHOES, TIMBERLAND],
+  relatedProducts: [],
+  sameCollectionProducts: [],
+  sameModelProducts: [],
+  imgFiles: []
+}
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '70%',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIndex, productType, setProductType }: AddressFormProps) => {
   const [sizeCountryOptions, setSizeCountryOptions] = useState(SIZE.SIZE_COUNRY_DATA);
-
+  const [open, setOpen] = useState(false)
   const products = useSelector((state) => state.product.productsAll);
-  const formik = useFormik({
+  const { id } = useParams();
+  const router = useRouter();
+  const [combineVariableProducts, setCombineVariableProducts] = useState(products);
+  useEffect(() => {
+    if (id) {
+      const product = products.find((item) => item.id === Number(id))
+      formik.setValues(product || MOCK)
+    }
+  }, [])
+  const formik = useFormik<IProductForm>({
     initialValues: {
       id: shippingData.id ?? 1,
       name: shippingData.name ?? '',
@@ -42,6 +87,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
       brand: shippingData.brand ?? '',
       gender: shippingData.gender ?? 'male',
       size: shippingData.size ?? [],
+      image: '',
       sizeCountry: shippingData.sizeCountry ?? 'EU',
       description: shippingData.description ?? '',
       additionalMaterials: shippingData.additionalMaterials ?? [],
@@ -49,7 +95,7 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
       sameCollectionProducts: shippingData.sameCollectionProducts ?? [],
       sameModelProducts: shippingData.sameModelProducts ?? [],
       imgFiles: shippingData.imgFiles ?? [],
-      videoFiles: shippingData.videoFiles ?? []
+      combinedProducts: shippingData.combinedProducts
     },
     validationSchema,
     onSubmit: (values) => {
@@ -112,15 +158,9 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
 
           formik.setFieldValue('imgFiles', [...formik.values.imgFiles, ...files]);
           break;
-        case 'video':
-          formik.setFieldValue('videoFiles', [...formik.values.videoFiles, ...files]);
-          break;
-        case 'video':
-          formik.setFieldValue('videoFiles', [...formik.values.videoFiles, ...files]);
-          break;
       }
     },
-    [formik.values.imgFiles, formik.values.videoFiles]
+    [formik.values.imgFiles]
   );
 
   const handleDeleteFiles = useCallback(
@@ -131,20 +171,29 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
           newFiles = formik.values.imgFiles.filter((_file, i) => i !== index);
           formik.setFieldValue('imgFiles', newFiles);
           break;
-        case 'video':
-          newFiles = formik.values.videoFiles.filter((_file, i) => i !== index);
-          formik.setFieldValue('videoFiles', newFiles);
-          break;
       }
     },
-    [formik.values.imgFiles, formik.values.videoFiles]
+    [formik.values.imgFiles]
   );
+  const handleCombineAdd = (product: any) => {
+    const newArr = combineVariableProducts.filter(item => item.id !== product.id);
+    setCombineVariableProducts(newArr)
+    formik.setFieldValue('combinedProducts', [...formik.values.combinedProducts, product])
+  }
+
+  const setNewProduct = (newProduct: IProductForm) => {
+    if (router) {
+      router.push(`/product/${newProduct.id}`);
+    }
+
+  }
 
   return (
     <>
       <form onSubmit={formik.handleSubmit} id="validation-forms">
         <Grid container spacing={3}>
-          <MultiLevelList onChange={setProductType} />
+          <CombinedProducts formik={formik} openModal={setOpen} setNewProduct={setNewProduct} />
+          <MultiLevelList formik={formik} onChange={setProductType} />
           <Grid item xs={12}>
             <TextField
               id="name"
@@ -169,19 +218,6 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
               renderInput={(params) => <TextField label={'Бренд'} value={formik.values.brand} {...params} />}
             />
           </Grid>
-          {/* 
-            <Grid item xs={12}>
-            <Autocomplete
-              id="category"
-              disablePortal
-              value={{ label: formik.values.category }}
-              options={SIZE.CATEGORY_DATA}
-              onChange={categoryHandler}
-              sx={{ width: '100%' }}
-              renderInput={(params) => <TextField {...params} label="Категория" />}
-            />
-          </Grid>*/}
-
           <Grid item xs={12}>
             <TextField
               id="description"
@@ -197,14 +233,14 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
           {productType === 'Обувь' && <ShoesFields formik={formik} sizeOptions={sizeCountryOptions} />}
           <FileForm
             imgTypeFiles={formik.values.imgFiles}
-            videoTypeFiles={formik.values.videoFiles}
+            videoTypeFiles={formik.values.imgFiles}
             setFiles={handleFiles}
             deleteFiles={handleDeleteFiles}
           />
           <AdditionalMaterials formik={formik} />
-          <SearchSelect label={'Сопутствующие товары'} inputLabel={'Поиск'} options={products} setRelatedId={setRelatedProducts} />
-          <SearchSelect label={'Товары из одной коллекции'} inputLabel={'Поиск'} options={products} setRelatedId={setCollectionProducts} />
-          <SearchSelect label={'Товары такой же модели'} inputLabel={'Поиск'} options={products} setRelatedId={setModelProducts} />
+          <SearchSelect label={'Сопутствующие товары'} inputLabel={'Поиск'} options={products} chooseProducts={formik.values.relatedProducts} setRelatedId={setRelatedProducts} />
+          <SearchSelect label={'Товары из одной коллекции'} inputLabel={'Поиск'} options={products} chooseProducts={formik.values.sameCollectionProducts} setRelatedId={setCollectionProducts} />
+          <SearchSelect label={'Модели'} inputLabel={'Поиск'} options={products} chooseProducts={formik.values.sameModelProducts} setRelatedId={setModelProducts} />
           <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
@@ -214,13 +250,37 @@ const ProductInfoForm = ({ shippingData, setShippingData, handleNext, setErrorIn
           <Grid item xs={12}>
             <Stack direction="row" justifyContent="flex-end">
               <AnimateButton>
-                <Button variant="contained" sx={{ my: 3, ml: 1 }} type="submit" onClick={() => setErrorIndex(0)}>
+                <Button variant="contained" sx={{ my: 3, ml: 1 }} disabled={!productType} type="submit" onClick={() => setErrorIndex(0)}>
                   Next
                 </Button>
               </AnimateButton>
             </Stack>
           </Grid>
         </Grid>
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Autocomplete
+              id={`search-test`}
+              freeSolo
+              options={combineVariableProducts}
+              renderOption={(props, option, state) => (
+                <Box onClick={() => handleCombineAdd(option)} sx={{
+                  cursor: 'pointer', p: '10px', borderRadius: '10px', transition: '0.3s', ":hover": {
+                    backgroundColor: '#D3D3D3'
+                  }
+                }}>
+                  <OptionCard {...option} />
+                </Box>
+              )}
+              renderInput={(params) => <TextField {...params} label={'Товары'} />}
+            />
+          </Box>
+        </Modal>
       </form>
     </>
   );

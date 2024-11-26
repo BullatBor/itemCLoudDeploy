@@ -47,7 +47,7 @@ export const AdditionalMaterials: FC<PROPS> = ({ formik }) => {
       </Typography>
 
       {formik.values.additionalMaterials.length ? (
-        formik.values.additionalMaterials.map((_:unknown, index: number) => {
+        formik.values.additionalMaterials.map((_: unknown, index: number) => {
           return (
             <Grid key={index} item xs={12} sx={{ border: '1px #D3D3D3 solid', borderRadius: '10px', px: '14px', py: '15px' }}>
               <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -55,7 +55,7 @@ export const AdditionalMaterials: FC<PROPS> = ({ formik }) => {
                   <FilePreview
                     materialsIndex={index}
                     deleteFile={deleteImage}
-                    files={formik.values.additionalMaterials[index].image}
+                    files={formik.values.additionalMaterials[index].image || []} //Костыль
                     type="image"
                     stubsCount={1}
                   />

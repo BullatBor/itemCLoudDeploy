@@ -8,43 +8,14 @@ import { dispatch } from '../index';
 // types
 import { DefaultRootStateProps } from 'types';
 import { ProductsFilter, Address } from 'types/e-commerce';
-import { IProductInfo } from 'types/product';
+import { IProductForm } from 'types/product';
+import { BIRKENSTON, NIKE_SHOES, TIMBERLAND } from 'store/constant';
 
 // ----------------------------------------------------------------------
-
-const MOCK_PRODUCTS: IProductInfo[] = [
-  {
-    id: 1,
-    name: 'Кроссовки Nike Air Max 90',
-    brand: 'Nike',
-    size: [{ value: '42' }],
-    sizeCountry: 'EU',
-    description:
-      'Классические кроссовки Nike Air Max 90 с воздушной подушкой для комфорта и амортизации. Идеально подходят для повседневной носки.',
-    additionalMaterials: ['Кожа', 'Синтетика', 'Резина'],
-    image: 'https://outmaxshop.ru/components/com_jshopping/files/img_products/22300/nike-air-max-90-22300-1.jpg'
-  },
-  {
-    id: 2,
-    name: 'Ботинки Timberland',
-    brand: 'Timberland',
-    size: [{ value: '43' }],
-    sizeCountry: 'US',
-    description:
-      'Прочные кожаные ботинки Timberland с водонепроницаемой мембраной. Идеально подходят для прогулок по пересеченной местности.',
-    additionalMaterials: ['Кожа', 'Текстиль', 'Резина'],
-    image: 'https://cdn1.ozone.ru/s3/multimedia-r/6857424447.jpg'
-  },
-  {
-    id: 3,
-    name: 'Сандалии Birkenstock',
-    brand: 'Birkenstock',
-    size: [{ value: '40' }],
-    sizeCountry: 'EU',
-    description: 'Комфортные сандалии Birkenstock из натуральной кожи с анатомической стелькой. Идеально подходят для жаркой погоды.',
-    additionalMaterials: ['Кожа', 'Пробка', 'Резина'],
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe33krC5jK7eX5tDcja46B1KTW22lxr_5Pow&s'
-  }
+const MOCK_PRODUCTS: IProductForm[] = [
+  NIKE_SHOES,
+  TIMBERLAND,
+  BIRKENSTON
 ];
 
 const initialState: DefaultRootStateProps['product'] = {
@@ -73,7 +44,6 @@ const slice = createSlice({
     getProductsSuccess(state, action) {
       state.products = action.payload;
     },
-
     // FILTER PRODUCTS
     filterProductsSuccess(state, action) {
       state.products = action.payload;

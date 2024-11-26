@@ -11,11 +11,12 @@ interface ISearchSelect {
   label: string;
   inputLabel: string;
   options: IProductInfo[];
+  chooseProducts: IProductInfo[]
   setRelatedId: (product: IProductInfo, type: 'add' | 'remove') => void;
 }
 
-const SearchSelect: FC<ISearchSelect> = ({ label, inputLabel, options, setRelatedId }) => {
-  const [relatedOptions, setRelatedOptions] = useState<IProductInfo[]>([]);
+const SearchSelect: FC<ISearchSelect> = ({ label, inputLabel, options, chooseProducts, setRelatedId }) => {
+  const [relatedOptions, setRelatedOptions] = useState<IProductInfo[]>(chooseProducts || []);
   const [newOptions, setNewOption] = useState<IProductInfo[]>(options);
   const clickHandler = (option: IProductInfo) => {
     const filteredOptions = newOptions.filter((product) => product.id !== option.id);
@@ -42,10 +43,12 @@ const SearchSelect: FC<ISearchSelect> = ({ label, inputLabel, options, setRelate
           freeSolo
           options={newOptions}
           renderOption={(props, option, state) => (
-            <Box onClick={() => clickHandler(option)} sx={{ cursor: 'pointer', p: '10px', borderRadius: '10px', transition: '0.3s', ":hover": {
-              backgroundColor: '#D3D3D3'
-            } }}>
-              <OptionCard {...option}/>
+            <Box onClick={() => clickHandler(option)} sx={{
+              cursor: 'pointer', p: '10px', borderRadius: '10px', transition: '0.3s', ":hover": {
+                backgroundColor: '#D3D3D3'
+              }
+            }}>
+              <OptionCard {...option} />
             </Box>
           )}
           renderInput={(params) => <TextField {...params} label={inputLabel} />}

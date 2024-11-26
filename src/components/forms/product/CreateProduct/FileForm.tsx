@@ -12,7 +12,7 @@ interface IFileForm {
   productName?: string;
 }
 
-const FileForm: FC<IFileForm> = ({ productName, imgTypeFiles, videoTypeFiles, setFiles, deleteFiles }) => {
+const FileForm: FC<IFileForm> = ({ productName, imgTypeFiles, setFiles, deleteFiles }) => {
   return (
     <Grid item xs={12}>
       <Grid item xs={12} sx={{ border: '1px grey solid', borderRadius: '10px', px: '14px', py: '15px' }}>

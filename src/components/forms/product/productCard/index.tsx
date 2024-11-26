@@ -11,7 +11,7 @@ const ProductCard: FC<IProductCardInfo> = ({ name, brand, description, image, on
     <Grid
       item
       sx={{
-        width: 200,
+        width: { xs: '100%', sm: '200px' },
         boxShadow: '0 2px 14px 0 rgb(32 40 45 / 8%)',
         borderRadius: '10px',
         border: '1px solid',
@@ -19,19 +19,19 @@ const ProductCard: FC<IProductCardInfo> = ({ name, brand, description, image, on
         py: '15px',
         display: 'flex',
         flexDirection: 'column',
-        gap: 2
+        gap: { xs: '8px', sm: '16px' }
       }}
     >
       <Grid item>
-        <Typography variant="h3" gutterBottom sx={{ mb: 2 }}>
+        <Typography variant="h3" gutterBottom sx={{ mb: { xs: '5px', sm: '8px' }, fontSize: { xs: '12px' } }}>
           {name}
         </Typography>
       </Grid>
-      <Grid item sx={{display: 'flex', justifyContent: 'center'}}>
+      <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
         <img width={150} height={70} src={image || ''} alt={name || 'shoes'} />
       </Grid>
       <Grid item>
-        <Typography variant="h6" sx={{ color: 'grey' }}>
+        <Typography sx={{ color: 'grey', fontSize: { xs: '12px', fontWeight: { xs: 400, sm: 500 } } }}>
           {description}
         </Typography>
       </Grid>

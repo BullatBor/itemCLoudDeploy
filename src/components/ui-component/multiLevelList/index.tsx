@@ -6,12 +6,13 @@ import { TextField, Typography } from '@mui/material';
 import { CATEGORIES, shoeCategoryDictionary } from './Constants';
 
 interface PROPS {
+  formik: any;
   onChange: (category: string) => void;
 }
 
-const MultiLevelList: FC<PROPS> = ({ onChange }) => {
+const MultiLevelList: FC<PROPS> = ({ formik, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [path, setPath] = useState<string[]>([]);
+  const [path, setPath] = useState<string[]>(formik.values.category.path || []);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLInputElement>(null);
   const isExpansiveItem = useRef(true);
@@ -41,6 +42,7 @@ const MultiLevelList: FC<PROPS> = ({ onChange }) => {
       onChange(newPath[0]);
       if (!isExpansiveItem.current) {
         setIsOpen(false);
+        formik.setFieldValue('category', { value: node, path: newPath })
       }
       isExpansiveItem.current = false;
     }

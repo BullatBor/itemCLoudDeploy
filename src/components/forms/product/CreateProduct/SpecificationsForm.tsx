@@ -41,7 +41,7 @@ export default function PaymentForm({ productType, paymentData, setPaymentData, 
     <>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
-          {productType === 'Обувь' && <ShoesSpecifications formik={formik} />}
+          {productType === 'Обувь' || productType === 'Одежда' && <ShoesSpecifications formik={formik} />}
           {productType === 'Сумки' && <BagsSpecifications formik={formik} />}
           {productType === 'Часы' && <WatchesSpecifications formik={formik} />}
           {productType === 'Очки' && <GlassesSpecifications formik={formik} />}

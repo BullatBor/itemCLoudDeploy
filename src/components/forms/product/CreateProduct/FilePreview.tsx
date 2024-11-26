@@ -19,6 +19,7 @@ interface IFilePreview {
 }
 export const FilePreview: FC<IFilePreview> = ({ type, files, title, height, materialsIndex, deleteFile, stubsCount = 0 }) => {
   const count = stubsCount > files.length ? stubsCount - files.length : 0;
+
   const stubsArray = Array.from({ length: count }, () => null);
   return (
     <>
